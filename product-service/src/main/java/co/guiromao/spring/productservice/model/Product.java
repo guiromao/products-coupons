@@ -21,6 +21,11 @@ public class Product {
     @Transient
     private String couponCode;
 
+    // Default constructor needs to be present
+    public Product() {
+
+    }
+
     public Product(String name, String description, BigDecimal price, String couponCode) {
         this.name = name;
         this.description = description;

@@ -12,6 +12,10 @@ public class ProductConverter {
     }
 
     public static ProductDto productToDto(Product product) {
+        if (product == null) {
+            return null;
+        }
+
         return new ProductDto(product.getId(), product.getName(),
                 product.getDescription(), product.getPrice(), product.getCouponCode());
     }

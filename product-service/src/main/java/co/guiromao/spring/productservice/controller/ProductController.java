@@ -7,6 +7,8 @@ import co.guiromao.spring.productservice.model.Product;
 import co.guiromao.spring.productservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +48,11 @@ public class ProductController {
                 ProductConverter.dtoToProduct(coupon != null ? productDto.withPrice(actualPrice) : productDto);
 
         return ProductConverter.productToDto(productService.saveProduct(savedProduct));
+    }
+
+    @GetMapping("/{productId}")
+    public ProductDto getProductById(@PathVariable Long productId) {
+        return ProductConverter.productToDto(productService.getProductById(productId));
     }
 
 }

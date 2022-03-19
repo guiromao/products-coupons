@@ -19,8 +19,8 @@ public class ProductService {
         return productRepository.saveAndFlush(product);
     }
 
-    public Product getProduct(String name) {
-        return productRepository.findByName(name);
+    public Product getProductById(Long id) {
+        return productRepository.findById(id).orElse(null);
     }
 
 }
