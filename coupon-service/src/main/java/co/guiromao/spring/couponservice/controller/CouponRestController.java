@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/coupons-api/coupons")
-public class CouponController {
+public class CouponRestController {
 
     private CouponService couponService;
 
     @Autowired
-    public CouponController(CouponService service) {
+    public CouponRestController(CouponService service) {
         couponService = service;
     }
 

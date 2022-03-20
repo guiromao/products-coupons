@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -30,13 +31,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic();
         http
                 .csrf().disable()
-                .authorizeRequests().mvcMatchers(HttpMethod.GET, "/v1/coupons-api/coupons")
+                .authorizeRequests()
+                .mvcMatchers(HttpMethod.GET, "/v1/coupons-api/coupons/{code:^[A-Z]*$}",
+                        "/", "/index", "/showGetCoupon", "/getCoupon", "/couponDetails")
                 .hasAnyRole("USER", "ADMIN")
-                .mvcMatchers(HttpMethod.POST, "/v1/coupons-api/coupons").hasRole("ADMIN");
+                .mvcMatchers(HttpMethod.GET, "/createCoupon", "/showCreateCoupon",
+                        "/createResponse").hasRole("ADMIN")
+                .mvcMatchers(HttpMethod.POST, "/getCoupon").hasAnyRole("USER", "ADMIN")
+                .mvcMatchers(HttpMethod.POST, "/v1/coupons-api/coupons",
+                        "/saveCoupon").hasRole("ADMIN");
     }
 
     @Bean
     public PasswordEncoder generatePasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }

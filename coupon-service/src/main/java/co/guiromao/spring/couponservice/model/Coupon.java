@@ -17,6 +17,16 @@ public class Coupon {
     private BigDecimal discount;
     private String expDate;
 
+    @Override
+    public String toString() {
+        return "Coupon{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", discount=" + discount +
+                ", expDate='" + expDate + '\'' +
+                '}';
+    }
+
     public Long getId() {
         return id;
     }
@@ -33,4 +43,19 @@ public class Coupon {
         return expDate;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        this.discount = discount;
+    }
+
+    public void setExpDate(String expDate) {
+        this.expDate = expDate;
+    }
 }
