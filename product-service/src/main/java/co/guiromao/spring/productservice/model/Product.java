@@ -37,6 +37,17 @@ public class Product {
         return new Product(this.name, this.description, updatedPrice, this.couponCode);
     }
 
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", couponCode='" + couponCode + '\'' +
+                '}';
+    }
+
     public Long getId() {
         return id;
     }

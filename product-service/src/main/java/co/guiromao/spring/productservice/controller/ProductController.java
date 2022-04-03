@@ -1,58 +1,52 @@
 package co.guiromao.spring.productservice.controller;
 
 import co.guiromao.spring.productservice.converter.ProductConverter;
-import co.guiromao.spring.productservice.dto.CouponDto;
-import co.guiromao.spring.productservice.dto.ProductDto;
+import co.guiromao.spring.productservice.dto.SimpleProductDto;
 import co.guiromao.spring.productservice.model.Product;
 import co.guiromao.spring.productservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.math.BigDecimal;
-
-@RestController
-@RequestMapping("/v1/products-api/products")
+@Controller
 public class ProductController {
 
     private ProductService productService;
-    private RestTemplate restTemplate;
-
-    @Value("${couponService.url}")
-    private String couponServiceUrl;
 
     @Autowired
-    public ProductController(ProductService service, RestTemplate restTemplate) {
-        this.productService = service;
-        this.restTemplate = restTemplate;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
-    @PostMapping
-    public ProductDto save(@RequestBody ProductDto productDto) {
-        CouponDto coupon =
-                restTemplate.getForObject(couponServiceUrl + productDto.getCouponCode(), CouponDto.class);
-
-        BigDecimal actualPrice = coupon != null ?
-                    productDto.getPrice().subtract(
-                            productDto.getPrice().multiply(coupon.getDiscount().divide(BigDecimal.valueOf(100)))
-                    )
-                    : productDto.getPrice();
-
-        Product savedProduct =
-                ProductConverter.dtoToProduct(coupon != null ? productDto.withPrice(actualPrice) : productDto);
-
-        return ProductConverter.productToDto(productService.saveProduct(savedProduct));
+    @GetMapping("/showCreateProduct")
+    public String createProduct() {
+        return "createProduct";
     }
 
-    @GetMapping("/{productId}")
-    public ProductDto getProductById(@PathVariable Long productId) {
-        return ProductConverter.productToDto(productService.getProductById(productId));
+    @PostMapping("/saveProduct")
+    public String saveProduct(SimpleProductDto dto) {
+        Product product = ProductConverter.simpleDtoToProduct(dto);
+        System.out.println("Product: " + product);
+        productService.saveProduct(product);
+
+        return "createResponse";
+    }
+
+    @GetMapping("/showGetProduct")
+    public String showGetProduct() {
+        return "getProduct";
+    }
+
+    @PostMapping("/getProduct")
+    public ModelAndView getProduct(String productName) {
+        ModelAndView modelAndView = new ModelAndView("productDetails");
+        Product product = productService.getProductByName(productName);
+        modelAndView.addObject(product);
+
+        return modelAndView;
     }
 
 }

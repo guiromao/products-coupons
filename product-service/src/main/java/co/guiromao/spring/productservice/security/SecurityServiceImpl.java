@@ -1,5 +1,6 @@
-package co.guiromao.spring.couponservice.security;
+package co.guiromao.spring.productservice.security;
 
+import co.guiromao.spring.productservice.config.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

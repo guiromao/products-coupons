@@ -18,11 +18,6 @@ public class CouponPagesController {
         this.couponService = couponService;
     }
 
-    @GetMapping("/")
-    public String index() {
-        return "index";
-    }
-
     @GetMapping("/showCreateCoupon")
     public String createCoupon() {
         return "createCoupon";
