@@ -1,4 +1,4 @@
-package co.guiromao.spring.couponservice.security;
+package security.authserver.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,9 +12,8 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
@@ -27,6 +26,7 @@ import java.security.KeyPair;
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     private static final String COUPON_RESOURCE_ID = "couponService";
+    private static final String PRODUCT_RESOURCE_ID = "productService";
 
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
@@ -41,6 +41,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Value("${alias}")
     private String alias;
+
+    @Value("${security.privateKey}")
+    private String privateKey;
 
     @Autowired
     public AuthorizationServerConfig(AuthenticationManager authenticationManager,
@@ -67,7 +70,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret(passwordEncoder.encode("our-secret-123"))
                 .authorizedGrantTypes("password", "refresh_token")
                 .scopes("read", "write")
-                .resourceIds(COUPON_RESOURCE_ID);
+                .resourceIds(COUPON_RESOURCE_ID, PRODUCT_RESOURCE_ID);
+    }
+
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        security.tokenKeyAccess("permitAll()");
     }
 
     @Bean
@@ -78,9 +86,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-        KeyStoreKeyFactory keyFactory = new KeyStoreKeyFactory(new ClassPathResource(keyFile), password.toCharArray());
-        KeyPair keyPair = keyFactory.getKeyPair(alias);
-        jwtAccessTokenConverter.setKeyPair(keyPair);
+//        KeyStoreKeyFactory keyFactory = new KeyStoreKeyFactory(new ClassPathResource(keyFile), password.toCharArray());
+//        KeyPair keyPair = keyFactory.getKeyPair(alias);
+//        jwtAccessTokenConverter.setKeyPair(keyPair);
+        jwtAccessTokenConverter.setSigningKey(privateKey);
 
         return jwtAccessTokenConverter;
     }
