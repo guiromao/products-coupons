@@ -10,8 +10,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
-//@Configuration
+import java.util.List;
+
+@Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserDetailsServiceImpl userDetailsService;
@@ -28,9 +36,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
                 .authorizeRequests()
-                .mvcMatchers(HttpMethod.GET, "/v1/products-api/products",
+                .mvcMatchers(HttpMethod.GET, "/v1/products-api/products/**",
                         "/products", "/index", "/showGetProduct",
                         "/productDetails").hasAnyRole("USER", "ADMIN")
                 .mvcMatchers("/getProduct").hasAnyRole("USER", "ADMIN")
@@ -40,6 +48,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().denyAll()
                 .and()
                 .logout().logoutSuccessUrl("/");
+
+        http.csrf(csrfCustomizer -> {
+            RequestMatcher requestMatcher = new RegexRequestMatcher(".*", "POST");
+            csrfCustomizer.ignoringRequestMatchers(requestMatcher);
+        });
+
+        http.cors(corsCustomizer -> {
+            CorsConfigurationSource corsConfigurationSource = request -> {
+                CorsConfiguration corsConfiguration = new CorsConfiguration();
+                corsConfiguration.setAllowedOrigins(List.of("localhost:3000", "localhost:3002"));
+                corsConfiguration.setAllowedMethods(List.of("POST", "GET"));
+
+                return corsConfiguration;
+            };
+            corsCustomizer.configurationSource(corsConfigurationSource);
+        });
     }
 
     @Bean

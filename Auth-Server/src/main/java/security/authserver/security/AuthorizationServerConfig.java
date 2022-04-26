@@ -68,9 +68,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory().withClient("coupon-service-app")
                 .secret(passwordEncoder.encode("our-secret-123"))
-                .authorizedGrantTypes("password", "refresh_token")
+                .authorizedGrantTypes("authorization_code", "password", "refresh_token")
                 .scopes("read", "write")
-                .resourceIds(COUPON_RESOURCE_ID, PRODUCT_RESOURCE_ID);
+                .resourceIds(COUPON_RESOURCE_ID, PRODUCT_RESOURCE_ID)
+                .redirectUris("http://localhost:8083/couponHandlerPage");
     }
 
     @Override

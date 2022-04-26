@@ -7,6 +7,7 @@ import co.guiromao.spring.productservice.model.Product;
 import co.guiromao.spring.productservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/v1/products-api/products")
+@CrossOrigin
 public class ProductRestController {
 
     private ProductService productService;

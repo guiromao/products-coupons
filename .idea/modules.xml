@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Auth-Server/Auth-Server.iml" filepath="$PROJECT_DIR$/Auth-Server/Auth-Server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FindMultiple/FindMultiple.iml" filepath="$PROJECT_DIR$/FindMultiple/FindMultiple.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Project.iml" filepath="$PROJECT_DIR$/.idea/Project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/coupon-service/coupon-service.iml" filepath="$PROJECT_DIR$/coupon-service/coupon-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/product-service/product-service.iml" filepath="$PROJECT_DIR$/product-service/product-service.iml" />
+    </modules>
+  </component>
+</project>

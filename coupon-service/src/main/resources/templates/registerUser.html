@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Register User</title>
 </head>
 <body>
-<form action="/registerUser" method="post">
+<form action="#" th:action="@{/registerUser}" method="post">
     <pre>
         First Name: <input type="text" name="firstName" /><br/>
         Last name: <input type="text" name="lastName" /><br/>
